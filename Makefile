@@ -28,3 +28,7 @@ migrate-down:
 
 migrate-action:
 	@cmd /C "if not defined action (echo Error: Missing action parameter. Usage: make migrate-action action=up && exit 1) else (docker compose run --rm todoapp-postgres-migrate -path /migrations -database postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@todoapp-postgres:5432/$(POSTGRES_DB)?sslmode=disable %action%)"
+
+
+todoapp-run:
+	go run ./cmd/todoapp/main.go
