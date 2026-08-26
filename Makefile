@@ -15,7 +15,7 @@ env-port-close:
 	docker compose down port-forwarder
 
 env-cleanup:
-	@cmd /V:ON /C "set /p ans=\"Clear all volume files? [y/N]: \" && if /I \"!ans!\"==\"y\" (docker compose down todoapp-postgres && if exist out\pgdata (rmdir /s /q out\pgdata) && echo Files deleted\!) else (echo Cleanup canceled.)"
+	@cmd /V:ON /C "set /p ans=\"Clear all volume files? [y/N]: \" && if /I \"!ans!\"==\"y\" (docker compose down todoapp-postgres port-forwarder && if exist out\pgdata (rmdir /s /q out\pgdata) && echo Files deleted\!) else (echo Cleanup canceled.)"
 
 migrate-create:
 	@cmd /C "if not defined seq (echo Error: Missing seq parameter && exit 1) else (docker compose run --rm todoapp-postgres-migrate create -ext sql -dir /migrations %seq%)"
@@ -31,4 +31,5 @@ migrate-action:
 
 
 todoapp-run:
-	go run ./cmd/todoapp/main.go
+	go mod tidy
+	@cmd /C "set LOGGER_FOLDER=$(PROJECT_ROOT)\out\logs&& set POSTGRES_HOST=localhost&& go run ./cmd/todoapp/main.go"
