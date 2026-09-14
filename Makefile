@@ -33,3 +33,6 @@ migrate-action:
 todoapp-run:
 	go mod tidy
 	@cmd /C "set LOGGER_FOLDER=$(PROJECT_ROOT)\out\logs&& set POSTGRES_HOST=localhost&& go run ./cmd/todoapp/main.go"
+
+logs-cleanup:
+	@cmd /V:ON /C "set /p ans=\"Clear all logs files? [y/N]: \" && if /I \"!ans!\"==\"y\" (if exist out\logs (rmdir /s /q out\logs) && echo Logs deleted\!) else (echo Cleanup canceled.)"
